@@ -1,0 +1,112 @@
+<mujoco model="turtlebot scene">
+  <include file="turtlebot4.xml"/>
+  <!-- <compiler angle="radian" meshdir="assets" autolimits="true"/> -->
+  <option>
+    <flag multiccd="enable"/>
+  </option>
+  <option noslip_iterations="2"/>
+
+  <statistic center="0 0 0.1" extent="0.8"/>
+
+  <visual>
+    <headlight diffuse="0.3 0.3 0.3" ambient="0.15 0.15 0.15" specular="0.1 0.1 0.1"/>
+    <rgba haze="0.15 0.25 0.35 1"/>
+    <global azimuth="120" elevation="-20" offwidth="640" offheight="480"/>
+  </visual>
+
+  <asset>
+    <texture type="skybox" builtin="gradient" rgb1="0.3 0.5 0.7" rgb2="0 0 0" width="512" height="3072"/>
+    <texture type="2d" name="groundplane" builtin="checker" mark="edge" rgb1="0.2 0.3 0.4" rgb2="0.1 0.2 0.3"
+      markrgb="0.8 0.8 0.8" width="300" height="300"/>
+    <material name="groundplane" texture="groundplane" texuniform="true" texrepeat="5 5" reflectance="0.2"/>
+  </asset>
+
+  <worldbody>
+    <light cutoff="90" diffuse="1 1 1" exponent="1" pos="0 -1 2" dir="0 .5 -1" specular=".1 .1 .1"/>
+    <light cutoff="90" diffuse="1 1 1" exponent="5" pos="1 6 3.5" dir="0 -.5 -2" specular=".1 .1 .1"/>
+    <light cutoff="90" diffuse="1 1 1" exponent="5" pos="-1 6 4.5" dir="0 .5 -2" specular=".1 .1 .1"/>
+    <geom name="floor" size="0 0 0.05" type="plane" material="groundplane" condim="6" priority="1"/>
+    <geom name="og" type="box" pos="-0.3 7 0" size="4 3 1.45" rgba="1 1 1 1"/>
+    <geom name="og-step" type="box" pos="2.8 3.4 0" size="0.9 0.6 1.45" rgba="1 1 1 1"/>
+    <body name="shelve-3-5" pos="-3.3 7 1.45" axisangle="0 0 1 1.57">
+      <geom type="box" size="2.5 0.4 0.02" pos="0 0 0.2" rgba="0.7 0.7 0.7 1"/>
+      <geom type="box" size="2.5 0.4 0.02" pos="0 0 1.1" rgba="0.7 0.7 0.7 1"/>
+      <geom type="box" size="2.5 0.4 0.02" pos="0 0 2.0" rgba="0.7 0.7 0.7 1"/>
+      <geom type="cylinder" size="0.03 1.1" pos="2.4 0.3 1.0" rgba="0.6 0.6 0.6 1"/>
+      <geom type="cylinder" size="0.03 1.1" pos="2.4 -0.3 1.0" rgba="0.6 0.6 0.6 1"/>
+      <geom type="cylinder" size="0.03 1.1" pos="1.5 0.3 1.0" rgba="0.6 0.6 0.6 1"/>
+      <geom type="cylinder" size="0.03 1.1" pos="1.5 -0.3 1.0" rgba="0.6 0.6 0.6 1"/>
+      <geom type="cylinder" size="0.03 1.1" pos="0.5 0.3 1.0" rgba="0.6 0.6 0.6 1"/>
+      <geom type="cylinder" size="0.03 1.1" pos="0.5 -0.3 1.0" rgba="0.6 0.6 0.6 1"/>
+      <geom type="cylinder" size="0.03 1.1" pos="-2.4 0.3 1.0" rgba="0.6 0.6 0.6 1"/>
+      <geom type="cylinder" size="0.03 1.1" pos="-2.4 -0.3 1.0" rgba="0.6 0.6 0.6 1"/>
+      <geom type="cylinder" size="0.03 1.1" pos="-1.5 0.3 1.0" rgba="0.6 0.6 0.6 1"/>
+      <geom type="cylinder" size="0.03 1.1" pos="-1.5 -0.3 1.0" rgba="0.6 0.6 0.6 1"/>
+      <geom type="cylinder" size="0.03 1.1" pos="-0.5 0.3 1.0" rgba="0.6 0.6 0.6 1"/>
+      <geom type="cylinder" size="0.03 1.1" pos="-0.5 -0.3 1.0" rgba="0.6 0.6 0.6 1"/>
+    </body>
+    <body name="shelve-4-2" pos="-3.5 2.8 0" axisangle="0 0 1 1.57">
+      <geom type="box" size="1.0 0.4 0.02" pos="0 0 0.2" rgba="0.7 0.7 0.7 1"/>
+      <geom type="box" size="1.0 0.4 0.02" pos="0 0 0.8" rgba="0.7 0.7 0.7 1"/>
+      <geom type="box" size="1.0 0.4 0.02" pos="0 0 1.4" rgba="0.7 0.7 0.7 1"/>
+      <geom type="box" size="1.0 0.4 0.02" pos="0 0 2.0" rgba="0.7 0.7 0.7 1"/>
+      <geom type="cylinder" size="0.03 1.1" pos="0.9 0.3 1.0" rgba="0.6 0.6 0.6 1"/>
+      <geom type="cylinder" size="0.03 1.1" pos="-0.9 0.3 1.0" rgba="0.6 0.6 0.6 1"/>
+      <geom type="cylinder" size="0.03 1.1" pos="0.9 -0.3 1.0" rgba="0.6 0.6 0.6 1"/>
+      <geom type="cylinder" size="0.03 1.1" pos="-0.9 -0.3 1.0" rgba="0.6 0.6 0.6 1"/>
+      <geom type="cylinder" size="0.03 1.1" pos="0 -0.3 1.0" rgba="0.6 0.6 0.6 1"/>
+      <geom type="cylinder" size="0.03 1.1" pos="0 0.3 1.0" rgba="0.6 0.6 0.6 1"/>
+    </body>
+    <body name="shelve-5-5" pos="0.5 8.5 1.5">
+      <geom type="box" size="2.5 0.4 0.02" pos="0 0 0.2" rgba="0.7 0.7 0.7 1"/>
+      <geom type="box" size="2.5 0.4 0.02" pos="0 0 0.6" rgba="0.7 0.7 0.7 1"/>
+      <geom type="box" size="2.5 0.4 0.02" pos="0 0 1.05" rgba="0.7 0.7 0.7 1"/>
+      <geom type="box" size="2.5 0.4 0.02" pos="0 0 1.55" rgba="0.7 0.7 0.7 1"/>
+      <geom type="box" size="2.5 0.4 0.02" pos="0 0 2.0" rgba="0.7 0.7 0.7 1"/>
+      <geom type="cylinder" size="0.03 1.1" pos="2.4 0.3 1.0" rgba="0.6 0.6 0.6 1"/>
+      <geom type="cylinder" size="0.03 1.1" pos="2.4 -0.3 1.0" rgba="0.6 0.6 0.6 1"/>
+      <geom type="cylinder" size="0.03 1.1" pos="1.5 0.3 1.0" rgba="0.6 0.6 0.6 1"/>
+      <geom type="cylinder" size="0.03 1.1" pos="1.5 -0.3 1.0" rgba="0.6 0.6 0.6 1"/>
+      <geom type="cylinder" size="0.03 1.1" pos="0.5 0.3 1.0" rgba="0.6 0.6 0.6 1"/>
+      <geom type="cylinder" size="0.03 1.1" pos="0.5 -0.3 1.0" rgba="0.6 0.6 0.6 1"/>
+      <geom type="cylinder" size="0.03 1.1" pos="-2.4 0.3 1.0" rgba="0.6 0.6 0.6 1"/>
+      <geom type="cylinder" size="0.03 1.1" pos="-2.4 -0.3 1.0" rgba="0.6 0.6 0.6 1"/>
+      <geom type="cylinder" size="0.03 1.1" pos="-1.5 0.3 1.0" rgba="0.6 0.6 0.6 1"/>
+      <geom type="cylinder" size="0.03 1.1" pos="-1.5 -0.3 1.0" rgba="0.6 0.6 0.6 1"/>
+      <geom type="cylinder" size="0.03 1.1" pos="-0.5 0.3 1.0" rgba="0.6 0.6 0.6 1"/>
+      <geom type="cylinder" size="0.03 1.1" pos="-0.5 -0.3 1.0" rgba="0.6 0.6 0.6 1"/>
+    </body>
+    <body name="table-little" pos="2.2 1.5 0" axisangle="0 0 1 1.57">
+      <geom type="box" size="0.4 1.0 0.03" pos="0 0 0.7" rgba="0.8 0.6 0.4 1"/> 
+      <geom type="cylinder" size="0.03 0.35" pos="0.3 0.8 0.35" rgba="0.6 0.6 0.6 1"/> 
+      <geom type="cylinder" size="0.03 0.35" pos="-0.3 0.8 0.35" rgba="0.6 0.6 0.6 1"/>
+      <geom type="cylinder" size="0.03 0.35" pos="0.3 -0.8 0.35" rgba="0.6 0.6 0.6 1"/>
+      <geom type="cylinder" size="0.03 0.35" pos="-0.3 -0.8 0.35" rgba="0.6 0.6 0.6 1"/>
+    </body>
+    <body name="table-big" pos="-1 -1 0" axisangle="0 0 1 1.57">
+      <geom type="box" size="0.6 1.2 0.03" pos="0 0 0.7" rgba="0.8 0.6 0.4 1"/> 
+      <geom type="cylinder" size="0.03 0.35" pos="0.5 1.0 0.35" rgba="0.6 0.6 0.6 1"/> 
+      <geom type="cylinder" size="0.03 0.35" pos="-0.5 1.0 0.35" rgba="0.6 0.6 0.6 1"/>
+      <geom type="cylinder" size="0.03 0.35" pos="0.5 -1.0 0.35" rgba="0.6 0.6 0.6 1"/>
+      <geom type="cylinder" size="0.03 0.35" pos="-0.5 -1.0 0.35" rgba="0.6 0.6 0.6 1"/>
+    </body>
+    <body name="table-big-2" pos="0 5.5 1.45" axisangle="0 0 1 1.57">
+      <geom type="box" size="0.6 1.2 0.03" pos="0 0 0.7" rgba="0.8 0.6 0.4 1"/> 
+      <geom type="cylinder" size="0.03 0.35" pos="0.5 1.0 0.35" rgba="0.6 0.6 0.6 1"/> 
+      <geom type="cylinder" size="0.03 0.35" pos="-0.5 1.0 0.35" rgba="0.6 0.6 0.6 1"/>
+      <geom type="cylinder" size="0.03 0.35" pos="0.5 -1.0 0.35" rgba="0.6 0.6 0.6 1"/>
+      <geom type="cylinder" size="0.03 0.35" pos="-0.5 -1.0 0.35" rgba="0.6 0.6 0.6 1"/>
+    </body>
+    <body name="stair" pos="-0.5 3.4 -0.05">
+      <geom type="box" size="0.15 0.6 0.075" pos="-0.15 0 0.075" rgba="0.7 0.7 0.7 1"/>
+      <geom type="box" size="0.15 0.6 0.075" pos="0.15 0 0.225" rgba="0.7 0.7 0.7 1"/>
+      <geom type="box" size="0.15 0.6 0.075" pos="0.45 0 0.375" rgba="0.7 0.7 0.7 1"/>
+      <geom type="box" size="0.15 0.6 0.075" pos="0.75 0 0.525" rgba="0.7 0.7 0.7 1"/>
+      <geom type="box" size="0.15 0.6 0.075" pos="1.05 0 0.675" rgba="0.7 0.7 0.7 1"/>
+      <geom type="box" size="0.15 0.6 0.075" pos="1.35 0 0.825" rgba="0.7 0.7 0.7 1"/>
+      <geom type="box" size="0.15 0.6 0.075" pos="1.65 0 0.975" rgba="0.7 0.7 0.7 1"/>
+      <geom type="box" size="0.15 0.6 0.075" pos="1.95 0 1.125" rgba="0.7 0.7 0.7 1"/>
+      <geom type="box" size="0.15 0.6 0.075" pos="2.25 0 1.275" rgba="0.7 0.7 0.7 1"/>
+    </body>
+  </worldbody>
+</mujoco>

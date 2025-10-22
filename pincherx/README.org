@@ -1,0 +1,31 @@
+#+title: pincherx
+#+author: Eric Elbing
+#+filetags: :draft:
+#+OPTIONS: num:nil toc:nil date:nil
+#+LATEX: \setlength\parindent{0pt}
+#+LATEX_HEADER: \usepackage[a4paper, total={170mm,257mm}, left=20mm, top=20mm]{geometry}
+#+LATEX_HEADER: \usepackage{tikz}
+#+LATEX_HEADER: \usetikzlibrary{arrows.meta}
+#+LATEX_HEADER: \usepackage{amsmath}
+#+LATEX_HEADER: \usepackage[inline]{asymptote}
+#+LATEX_COMPILER: xelatex
+
+Implementation of the PincherX 100 using /MuJoCo/ and /OpenCV/.
+
+Lauch the Simulation Server with
+
+#+BEGIN_SRC shell
+python3 ./pincherx_sim.py
+#+END_SRC
+if fails, run using ~mjpython~ (at least on macos)
+
+Then i show how to interact with the API in ~pincherx_client.py~. This should behave in the same philosophy as ROS but with FastAPI instead of the ROS DDS.
+
+* Dependencies
+Install the following packages for this project to work properly:
+- mujoco
+- numpy
+- opencv-python
+- fastapi
+- uvicorn
+- websockets

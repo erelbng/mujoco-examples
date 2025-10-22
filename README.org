@@ -1,0 +1,37 @@
+#+title: mujoco-examples
+#+author: Eric Elbing
+#+filetags: :draft:
+#+OPTIONS: num:nil toc:nil date:nil
+#+LATEX: \setlength\parindent{0pt}
+#+LATEX_HEADER: \usepackage[a4paper, total={170mm,257mm}, left=20mm, top=20mm]{geometry}
+#+LATEX_HEADER: \usepackage{tikz}
+#+LATEX_HEADER: \usetikzlibrary{arrows.meta}
+#+LATEX_HEADER: \usepackage{amsmath}
+#+LATEX_HEADER: \usepackage[inline]{asymptote}
+#+LATEX_COMPILER: xelatex
+
+
+* Getting started
+Check out the different folders of this repository for different examples and project templates:
+  - turtlebot
+
+    A [[https://clearpathrobotics.com/turtlebot-4/][TurtleBot4]] implementation in FastAPI using /MuJoCo/ and /OpenCV/, publishing several topics like an IMU or Camera topic for /data-science/ and /computer vision/
+  - pincherx
+
+    A compact manipulator arm ([[https://www.trossenrobotics.com/pincherx100][PincherX100]]), implemented in FastAPI using /MuJoCo/ and /OpenCV/, for teleoperation tasks or more...
+
+This is basically a mirror of the [[https://github.com/erelbng/ros-examples][ros_examples]] repository, ut run directly in Python for easier experimentation, visualization, and cross-platform use (ACTUALLY INCLUDING WINDOWS!).
+  
+* BibTeX
+#+BEGIN_SRC text
+  @misc{mujoco2025examples,
+    author={Eric Elbing},
+    title={mujoco-examples},
+    month={October},
+    year={2025},
+    url={https://github.com/erelbng/mujoco-examples.git}
+  }
+#+END_SRC
+
+* Contact
+For additional technical support and other questions please reach out to [[mailto:eric.elbing@htwk-leipzig.de][eric.elbing@htwk-leipzig.de]].
