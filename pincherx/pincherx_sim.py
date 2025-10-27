@@ -11,6 +11,7 @@ import mujoco
 import numpy as np
 import uvicorn
 from fastapi import FastAPI, WebSocket
+from mujoco import viewer
 
 app = FastAPI(title="PincherX MuJoCo WebSocket Server")
 
@@ -48,7 +49,7 @@ class PincherXSim:
         self.last_image = None
 
         # === MuJoCo Viewer ===
-        self.viewer = mujoco.viewer.launch_passive(
+        self.viewer = viewer.launch_passive(
             self.model, self.data, show_left_ui=False, show_right_ui=False
         )
 
