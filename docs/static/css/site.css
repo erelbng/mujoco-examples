@@ -55,7 +55,7 @@
 
 /* fenced code blocks (Rouge) */
 .content div.highlighter-rouge { margin-bottom: 1em; }
-.content pre.highlight { padding: 1.25em 1.5em; text-align: left; }
+.content pre.highlight { padding: 1.25em 1.5em; text-align: left; border-radius: 10px; }
 .highlight .c, .highlight .c1, .highlight .cm { color: #6e7781; font-style: italic; }
 .highlight .k, .highlight .kd, .highlight .kn, .highlight .kr, .highlight .nb { color: #cf222e; }
 .highlight .s, .highlight .s1, .highlight .s2, .highlight .sb, .highlight .sh { color: #0a3069; }
@@ -65,21 +65,31 @@
 
 .content table { width: auto; }
 
-/* copy button on code blocks */
+/* copy button on code blocks, styled after GitHub's rendered Markdown */
 .content div.highlighter-rouge { position: relative; }
 .copy-button {
   position: absolute;
   top: 0.5rem;
   right: 0.5rem;
-  padding: 0.15rem 0.6rem;
-  border: 1px solid #dbdbdb;
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid #d1d9e0;
   border-radius: 6px;
-  background: #fff;
-  color: #4a4a4a;
-  font-family: 'Noto Sans', sans-serif;
-  font-size: 0.75rem;
+  background: #f6f8fa;
+  color: #59636e;
   cursor: pointer;
-  opacity: 0.7;
+  opacity: 0;
+  transition: opacity 0.2s, background-color 0.2s;
 }
-.copy-button:hover,
-.copy-button:focus-visible { opacity: 1; border-color: #b5b5b5; }
+.content div.highlighter-rouge:hover .copy-button,
+.copy-button:focus-visible,
+.copy-button.copied { opacity: 1; }
+.copy-button:hover { background: #eff2f5; color: #1f2328; }
+.copy-button.copied { color: #1a7f37; }
+@media (hover: none) {
+  .copy-button { opacity: 1; }
+}
