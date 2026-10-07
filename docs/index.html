@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>mujoco-examples</title>
+    <meta name="description" content="ROS-style robot simulations in plain Python: TurtleBot 4 and PincherX 100 in MuJoCo, served over FastAPI WebSockets with OpenCV camera streams.">
+    <meta property="og:title" content="mujoco-examples">
+    <meta property="og:description" content="ROS-style robot simulations in plain Python with MuJoCo, FastAPI and OpenCV.">
+    <meta property="og:image" content="https://erelbng.github.io/mujoco-examples/assets/tb4_sim_poster.jpg">
+    <meta property="og:type" content="website">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+
+    <style>
+        :root {
+            --fg: #24292e;
+            --fg-muted: #586069;
+            --bg: #ffffff;
+            --bg-subtle: #f6f8fa;
+            --border: #e1e4e8;
+            --link: #0366d6;
+            --btn-bg: #24292e;
+            --btn-bg-hover: #4a525a;
+            --btn-fg: #ffffff;
+            --accent: #0f766e;
+            --shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --fg: #e6edf3;
+                --fg-muted: #8b949e;
+                --bg: #0d1117;
+                --bg-subtle: #161b22;
+                --border: #30363d;
+                --link: #58a6ff;
+                --btn-bg: #e6edf3;
+                --btn-bg-hover: #b1bac4;
+                --btn-fg: #0d1117;
+                --accent: #2dd4bf;
+                --shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+            }
+        }
+
+        /* --- General Page Styling --- */
+        * { box-sizing: border-box; }
+        body {
+            margin: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
+            color: var(--fg);
+            background: var(--bg);
+            line-height: 1.6;
+        }
+        a { color: var(--link); }
+        code {
+            font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, Courier, monospace;
+            font-size: 0.88em;
+            background: var(--bg-subtle);
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            padding: 0.1em 0.35em;
+        }
+
+        /* --- Header Styling --- */
+        .project-header {
+            text-align: center;
+            padding: 40px 16px 20px;
+            max-width: 900px;
+            margin: 40px auto 0;
+        }
+        .project-header h1 { font-size: 2.6em; font-weight: 600; margin: 0 0 10px; line-height: 1.2; }
+        .project-header .tagline { font-size: 1.3em; color: var(--fg-muted); margin: 0 0 24px; line-height: 1.4; }
+        .project-header .authors { font-size: 1.1em; margin-bottom: 6px; }
+        .project-header .authors a { text-decoration: none; font-weight: 500; }
+        .project-header .authors a:hover { text-decoration: underline; }
+        .project-header .affiliations { color: var(--fg-muted); margin-bottom: 6px; }
+        .project-header .notes { font-size: 0.9em; color: var(--fg-muted); margin-bottom: 15px; }
+        .project-header .stack {
+            margin: 18px 0 6px;
+            display: flex; justify-content: center; flex-wrap: wrap; gap: 8px;
+        }
+        .project-header .stack span {
+            font-size: 0.85em; font-weight: 600;
+            padding: 3px 12px; border-radius: 30px;
+            border: 1px solid var(--border); color: var(--fg-muted);
+        }
+        .project-header .links { margin-top: 20px; display: flex; justify-content: center; align-items: center; flex-wrap: wrap; gap: 10px; }
+        .button {
+            display: inline-block; padding: 12px 24px;
+            background-color: var(--btn-bg); color: var(--btn-fg);
+            font-size: 1em; font-weight: 600; text-decoration: none;
+            border-radius: 30px; transition: background-color 0.2s ease-in-out;
+        }
+        .button:hover { background-color: var(--btn-bg-hover); }
+        .button i { margin-right: 8px; }
+
+        /* --- Main Content Styling --- */
+        main { max-width: 1200px; margin: 0 auto; padding: 20px 16px; }
+        section { margin-bottom: 40px; }
+        h2, h3 {
+            font-weight: 600;
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 10px;
+            margin-top: 40px;
+            margin-bottom: 20px;
+        }
+        h2 { font-size: 2em; }
+        h3 { font-size: 1.5em; }
+        hr { border: 0; height: 1px; background-color: var(--border); margin: 50px 0; }
+        ul { padding-left: 20px; }
+        li { margin-bottom: 8px; }
+        .intro-text { text-align: center; font-size: 1.2em; margin: 10px auto 30px; max-width: 900px; }
+
+        /* --- Video Grid Styling --- */
+        .video-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(min(100%, 420px), 1fr));
+            gap: 25px;
+        }
+        .video-container { text-align: center; }
+        .video-container strong { display: block; margin-bottom: 10px; font-size: 1.1em; }
+        .video-container .caption { color: var(--fg-muted); font-size: 0.95em; margin-top: 10px; }
+        .video-wrapper {
+            position: relative;
+            width: 100%;
+            aspect-ratio: 16 / 9;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            background: #000;
+        }
+        .video-wrapper video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+
+        /* --- Pipeline diagram --- */
+        .pipeline {
+            display: flex; align-items: stretch; justify-content: center;
+            gap: 0; margin: 30px auto; max-width: 1000px;
+        }
+        .node {
+            flex: 1 1 0;
+            background: var(--bg-subtle);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 18px;
+            text-align: center;
+        }
+        .node i { font-size: 1.8em; color: var(--accent); margin-bottom: 8px; }
+        .node .title { font-weight: 600; font-size: 1.05em; }
+        .node .sub { color: var(--fg-muted); font-size: 0.9em; }
+        .link {
+            flex: 0 0 150px;
+            display: flex; flex-direction: column; justify-content: center;
+            text-align: center; font-size: 0.8em; color: var(--fg-muted);
+            padding: 0 8px;
+        }
+        .link .arrow { font-size: 1.4em; color: var(--accent); line-height: 1.2; }
+        @media (max-width: 760px) {
+            .pipeline { flex-direction: column; }
+            .link { flex-basis: auto; padding: 10px 0; }
+            .link .arrow { transform: rotate(90deg); }
+        }
+
+        /* --- Robot cards --- */
+        .robot-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(min(100%, 420px), 1fr));
+            gap: 25px;
+        }
+        .robot-card {
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 4px 22px 18px;
+            min-width: 0;
+        }
+        .robot-card h3 { margin-top: 18px; display: flex; align-items: center; gap: 10px; }
+        .robot-card h3 i { color: var(--accent); }
+        .robot-card .label { font-weight: 600; margin: 14px 0 6px; }
+
+        /* --- Code blocks --- */
+        pre, .bibtex-code {
+            background-color: var(--bg-subtle);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 16px;
+            font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, Courier, monospace;
+            font-size: 0.85em;
+            line-height: 1.5;
+            overflow-x: auto;
+            margin: 0;
+        }
+        pre code { background: none; border: 0; padding: 0; font-size: 1em; }
+        .bibtex-code { white-space: pre-wrap; word-wrap: break-word; }
+        .steps { counter-reset: step; list-style: none; padding: 0; }
+        .steps > li { counter-increment: step; position: relative; padding-left: 44px; margin-bottom: 22px; }
+        .steps > li::before {
+            content: counter(step);
+            position: absolute; left: 0; top: 0;
+            width: 30px; height: 30px; border-radius: 50%;
+            background: var(--btn-bg); color: var(--btn-fg);
+            font-weight: 600; text-align: center; line-height: 30px;
+        }
+        .steps > li p { margin: 0 0 8px; }
+        .copy-wrap { position: relative; }
+        .copy-btn {
+            position: absolute; top: 8px; right: 8px;
+            border: 1px solid var(--border); background: var(--bg);
+            color: var(--fg-muted); border-radius: 6px;
+            padding: 4px 10px; cursor: pointer; font-size: 0.8em;
+        }
+        .copy-btn:hover { color: var(--fg); }
+
+        footer {
+            text-align: center; color: var(--fg-muted); font-size: 0.9em;
+            padding: 30px 16px 50px; border-top: 1px solid var(--border);
+        }
+    </style>
+</head>
+<body>
+
+    <header class="project-header">
+        <h1>mujoco-examples</h1>
+        <p class="tagline">ROS-style robot simulations in plain Python</p>
+        <div class="authors">
+            <a href="https://github.com/erelbng">Eric Elbing</a>
+        </div>
+        <div class="affiliations">
+            Future Robotics &middot; HTWK Leipzig
+        </div>
+        <div class="notes">
+            Correspondence: <a href="mailto:eric.elbing@htwk-leipzig.de">eric.elbing@htwk-leipzig.de</a>
+        </div>
+        <div class="stack">
+            <span>MuJoCo</span><span>FastAPI</span><span>WebSockets</span><span>OpenCV</span><span>Linux &middot; macOS &middot; Windows</span>
+        </div>
+        <div class="links">
+            <a href="https://github.com/erelbng/mujoco-examples" class="button"><i class="fab fa-github"></i> Code</a>
+            <a href="#demos" class="button"><i class="fas fa-play-circle"></i> Videos</a>
+            <a href="#quick-start" class="button"><i class="fas fa-rocket"></i> Quick Start</a>
+            <a href="https://github.com/erelbng/ros-examples" class="button"><i class="fas fa-robot"></i> ROS Version</a>
+            <a href="#citation" class="button"><i class="fas fa-quote-right"></i> BibTeX</a>
+        </div>
+    </header>
+
+    <main>
+
+        <p class="intro-text">
+            <strong>mujoco-examples</strong> provides ready-to-run <strong>MuJoCo</strong> simulations of a
+            <strong>TurtleBot&nbsp;4</strong> mobile robot and a <strong>PincherX&nbsp;100</strong> manipulator.
+            Each robot runs behind a <strong>FastAPI WebSocket</strong> server that works like ROS topics, so you can
+            control it and read its sensors from a few lines of Python, without installing ROS.
+        </p>
+
+        <section id="demos">
+            <h3>🎥 Demos</h3>
+            <div class="video-grid">
+                <div class="video-container">
+                    <strong>TurtleBot 4: driving with <code>cmd_vel</code></strong>
+                    <div class="video-wrapper">
+                        <video autoplay muted loop playsinline preload="metadata" poster="assets/tb4_sim_poster.jpg" aria-label="TurtleBot 4 simulation">
+                            <source src="assets/tb4_sim.mp4" type="video/mp4">
+                        </video>
+                    </div>
+                    <div class="caption">Velocity commands go in over the WebSocket. Odometry and the onboard camera stream come back.</div>
+                </div>
+                <div class="video-container">
+                    <strong>PincherX 100: pick &amp; place</strong>
+                    <div class="video-wrapper">
+                        <video autoplay muted loop playsinline preload="metadata" poster="assets/pincherx_sim_poster.jpg" aria-label="PincherX 100 simulation">
+                            <source src="assets/pincherx_sim.mp4" type="video/mp4">
+                        </video>
+                    </div>
+                    <div class="caption">The client steps the arm through a sequence of joint poses and checks the joint feedback.</div>
+                </div>
+            </div>
+        </section>
+
+        <hr>
+
+        <section>
+            <h2>📘 About</h2>
+            <p>
+                This repository mirrors <a href="https://github.com/erelbng/ros-examples">ros-examples</a>, but runs
+                directly in Python. It is meant for quick experiments, visualization and cross-platform use,
+                <strong>Windows included</strong>.
+            </p>
+            <p>It is designed for:</p>
+            <ul>
+                <li><strong>Teaching and prototyping</strong> robot control without a ROS installation</li>
+                <li><strong>Computer vision</strong> on rendered camera frames, decoded with OpenCV</li>
+                <li><strong>Data science</strong> on odometry and joint states streamed as JSON</li>
+                <li><strong>Teleoperation</strong> from any language that can open a WebSocket</li>
+            </ul>
+        </section>
+
+        <section>
+            <h2>⚙️ How It Works</h2>
+            <p>
+                Every example has the same structure. The <code>*_sim.py</code> server loads the MJCF scene, opens the
+                MuJoCo passive viewer and serves one WebSocket endpoint at <code>ws://localhost:8000/ws</code>.
+                On each 20&nbsp;ms tick, the server reads any pending command, advances the physics, renders the robot camera
+                and sends back a state packet. This follows the ROS publish/subscribe model, with FastAPI in place of ROS DDS.
+            </p>
+            <div class="pipeline" role="img" aria-label="Client sends JSON commands over a WebSocket to a FastAPI server, which steps MuJoCo and returns state and camera frames at 50 Hz">
+                <div class="node">
+                    <i class="fas fa-laptop-code"></i>
+                    <div class="title">Your client</div>
+                    <div class="sub"><code>*_client.py</code>, Jupyter, any language</div>
+                </div>
+                <div class="link">
+                    <span>JSON command</span>
+                    <span class="arrow">&#8644;</span>
+                    <span>state + JPEG @ 50&nbsp;Hz</span>
+                </div>
+                <div class="node">
+                    <i class="fas fa-plug"></i>
+                    <div class="title">FastAPI server</div>
+                    <div class="sub">WebSocket <code>/ws</code> on port 8000</div>
+                </div>
+                <div class="link">
+                    <span>ctrl</span>
+                    <span class="arrow">&#8644;</span>
+                    <span>qpos, qvel, pixels</span>
+                </div>
+                <div class="node">
+                    <i class="fas fa-cubes"></i>
+                    <div class="title">MuJoCo</div>
+                    <div class="sub"><code>mj_step</code>, offscreen renderer, passive viewer</div>
+                </div>
+            </div>
+        </section>
+
+        <section>
+            <h2>🤖 Robots</h2>
+            <div class="robot-grid">
+                <div class="robot-card">
+                    <h3><i class="fas fa-route"></i> <a href="https://clearpathrobotics.com/turtlebot-4/">TurtleBot 4</a></h3>
+                    <p>
+                        A differential-drive mobile robot in a warehouse-style scene. It reports wheel odometry and a
+                        480&times;480 onboard camera image.
+                    </p>
+                    <div class="label">Command</div>
+<pre><code>{"cmd_vel": {"linear_x": 2.0, "angular_z": 1.0}}</code></pre>
+                    <div class="label">State</div>
+<pre><code>{
+  "odom":  {"x": 0.41, "y": 0.07, "theta": 0.33},
+  "image": "&lt;base64 JPEG&gt;"
+}</code></pre>
+                    <p><a href="https://github.com/erelbng/mujoco-examples/tree/main/turtlebot"><i class="fas fa-folder-open"></i> turtlebot/</a></p>
+                </div>
+                <div class="robot-card">
+                    <h3><i class="fas fa-hand-paper"></i> <a href="https://www.trossenrobotics.com/pincherx100">PincherX 100</a></h3>
+                    <p>
+                        A compact 4-DOF arm with a gripper, mounted on a workbench. Use it for teleoperation and
+                        pick-and-place. It reports joint positions, joint velocities and a camera image.
+                    </p>
+                    <div class="label">Command</div>
+<pre><code>{"joint_commands": {
+  "names": ["waist", "shoulder", "elbow",
+            "wrist", "gripper"],
+  "positions": [-0.8, 0.4, -0.3, 0.0, -1.0]
+}}</code></pre>
+                    <div class="label">State</div>
+<pre><code>{
+  "joint_names":      [...],
+  "joint_positions":  [...],
+  "joint_velocities": [...],
+  "image":            "&lt;base64 JPEG&gt;"
+}</code></pre>
+                    <p><a href="https://github.com/erelbng/mujoco-examples/tree/main/pincherx"><i class="fas fa-folder-open"></i> pincherx/</a></p>
+                </div>
+            </div>
+        </section>
+
+        <section id="quick-start">
+            <h2>🚀 Quick Start</h2>
+            <ol class="steps">
+                <li>
+                    <p>Clone the repository and install the dependencies:</p>
+<pre><code>git clone https://github.com/erelbng/mujoco-examples.git
+cd mujoco-examples
+pip install mujoco numpy opencv-python fastapi uvicorn websockets</code></pre>
+                </li>
+                <li>
+                    <p>Start a simulation server. On macOS, use <code>mjpython</code> instead of <code>python3</code> if the viewer fails to open.</p>
+<pre><code>python3 turtlebot/turtlebot_sim.py      # or: python3 pincherx/pincherx_sim.py</code></pre>
+                </li>
+                <li>
+                    <p>In a second terminal, connect the example client:</p>
+<pre><code>python3 turtlebot/turtlebot_client.py   # or: python3 pincherx/pincherx_client.py</code></pre>
+                </li>
+            </ol>
+        </section>
+
+        <section id="citation">
+            <h2>🧩 Citation</h2>
+            <p>If you use <strong>mujoco-examples</strong> in your work, please cite it as:</p>
+            <div class="copy-wrap">
+                <button class="copy-btn" type="button" data-target="bibtex"><i class="far fa-copy"></i> Copy</button>
+<div class="bibtex-code" id="bibtex">@misc{mujoco2025examples,
+  author = {Eric Elbing},
+  title  = {mujoco-examples},
+  month  = {October},
+  year   = {2025},
+  url    = {https://github.com/erelbng/mujoco-examples}
+}</div>
+            </div>
+        </section>
+
+        <section>
+            <h2>📬 Contact</h2>
+            <p>
+                For technical support and other questions, contact
+                <a href="mailto:eric.elbing@htwk-leipzig.de">eric.elbing@htwk-leipzig.de</a> or
+                <a href="https://github.com/erelbng/mujoco-examples/issues">open an issue</a>.
+            </p>
+        </section>
+
+    </main>
+
+    <footer>
+        Released under the <a href="https://github.com/erelbng/mujoco-examples/blob/main/LICENSE">GPL-3.0 License</a>.
+        Built with <a href="https://mujoco.org/">MuJoCo</a>.
+    </footer>
+
+    <script>
+        document.querySelectorAll('.copy-btn').forEach(function (btn) {
+            btn.addEventListener('click', function () {
+                var text = document.getElementById(btn.dataset.target).innerText;
+                navigator.clipboard.writeText(text).then(function () {
+                    btn.innerHTML = '<i class="fas fa-check"></i> Copied';
+                    setTimeout(function () { btn.innerHTML = '<i class="far fa-copy"></i> Copy'; }, 1500);
+                });
+            });
+        });
+    </script>
+
+</body>
+</html>
