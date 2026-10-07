@@ -160,6 +160,33 @@
     dialog.querySelector('.dialog-close').addEventListener('click', function () { dialog.close(); });
     dialog.addEventListener('click', function (e) { if (e.target === dialog) dialog.close(); });
     dialog.addEventListener('close', function () { player.pause(); player.removeAttribute('src'); });
+
+    // copy button on every code block, except plain-text blocks such as diagrams
+    function copyText(text) {
+      if (navigator.clipboard && window.isSecureContext) return navigator.clipboard.writeText(text);
+      var area = document.createElement('textarea');
+      area.value = text;
+      area.style.position = 'fixed';
+      area.style.opacity = '0';
+      document.body.appendChild(area);
+      area.select();
+      document.execCommand('copy');
+      document.body.removeChild(area);
+      return Promise.resolve();
+    }
+    document.querySelectorAll('.content div.highlighter-rouge:not(.language-plaintext)').forEach(function (block) {
+      var btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'copy-button';
+      btn.textContent = 'Copy';
+      btn.addEventListener('click', function () {
+        copyText(block.querySelector('code').innerText.replace(/\n$/, '')).then(function () {
+          btn.textContent = 'Copied';
+          setTimeout(function () { btn.textContent = 'Copy'; }, 1500);
+        });
+      });
+      block.appendChild(btn);
+    });
   })();
 </script>
 

@@ -64,3 +64,22 @@
 .highlight .nc, .highlight .nf { color: #8250df; }
 
 .content table { width: auto; }
+
+/* copy button on code blocks */
+.content div.highlighter-rouge { position: relative; }
+.copy-button {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  padding: 0.15rem 0.6rem;
+  border: 1px solid #dbdbdb;
+  border-radius: 6px;
+  background: #fff;
+  color: #4a4a4a;
+  font-family: 'Noto Sans', sans-serif;
+  font-size: 0.75rem;
+  cursor: pointer;
+  opacity: 0.7;
+}
+.copy-button:hover,
+.copy-button:focus-visible { opacity: 1; border-color: #b5b5b5; }
