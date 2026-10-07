@@ -3,13 +3,13 @@ layout: default
 title: mujoco-examples
 description: ROS-style robot simulations in plain Python with MuJoCo, FastAPI and OpenCV.
 image: assets/tb4_sim_poster.jpg
+tldr: >-
+  Ready-to-run [MuJoCo](https://mujoco.org) simulations of a TurtleBot 4 and a PincherX 100,
+  controlled over FastAPI WebSockets like ROS topics, without installing ROS.
 
-# header
 authors:
   - name: Eric Plaß
     url: https://github.com/erelbng
-affiliations:
-  - HTWK Leipzig
 links:
   - name: Code
     url: https://github.com/erelbng/mujoco-examples
@@ -18,20 +18,28 @@ links:
     url: https://github.com/erelbng/ros-examples
   - name: BibTeX
     url: "#citation"
+logos:
+  - name: HTWK Leipzig
+    src: assets/logos/htwk.svg
+    url: https://www.htwk-leipzig.de
+    height: 24
+  - name: Fakultät Ingenieurwissenschaften, HTWK Leipzig
+    src: assets/logos/htwk-fing.png
+    url: https://fing.htwk-leipzig.de
+    height: 34
 
-# teaser: videos side by side, then the one-line summary
-videos:
-  - title: TurtleBot 4
-    caption: Driving with cmd_vel, streaming odometry and camera
-    src: assets/tb4_sim.mp4
-    poster: assets/tb4_sim_poster.jpg
-  - title: PincherX 100
-    caption: Pick and place through a sequence of joint poses
-    src: assets/pincherx_sim.mp4
-    poster: assets/pincherx_sim_poster.jpg
-tldr: >-
-  Ready-to-run MuJoCo simulations of a TurtleBot 4 and a PincherX 100,
-  controlled over FastAPI WebSockets like ROS topics, without installing ROS.
+video_rows:
+  - title: In simulation
+    caption: Both robots driven by the example clients over the WebSocket API
+    videos:
+      - title: TurtleBot 4
+        caption: Driving with cmd_vel, streaming odometry and camera
+        src: assets/tb4_sim.mp4
+        poster: assets/tb4_sim_poster.jpg
+      - title: PincherX 100
+        caption: Pick and place through a sequence of joint poses
+        src: assets/pincherx_sim.mp4
+        poster: assets/pincherx_sim_poster.jpg
 
 footer: >-
   Built with [MuJoCo](https://mujoco.org), [FastAPI](https://fastapi.tiangolo.com) and [OpenCV](https://opencv.org).

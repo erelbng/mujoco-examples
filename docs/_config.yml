@@ -1,2 +1,5 @@
+remote_theme: erelbng/project-page-template
+plugins:
+  - jekyll-remote-theme
 title: mujoco-examples
 description: ROS-style robot simulations in plain Python
