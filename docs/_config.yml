@@ -1,4 +1,4 @@
-remote_theme: erelbng/project-page-template
+remote_theme: htwk-prodlog/project-page-template
 plugins:
   - jekyll-remote-theme
 title: mujoco-examples
