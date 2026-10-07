@@ -1,24 +1,40 @@
-**mujoco-examples** provides ready-to-run **MuJoCo** simulations of a **TurtleBot 4** mobile robot and a **PincherX 100** manipulator. Each robot runs behind a **FastAPI WebSocket** server that works like ROS topics, so you can control it and read its sensors from a few lines of Python, without installing ROS.
-
-**Author:** Eric Plaß, HTWK Leipzig  
-**Code:** [github.com/erelbng/mujoco-examples](https://github.com/erelbng/mujoco-examples)  
-**ROS version:** [github.com/erelbng/ros-examples](https://github.com/erelbng/ros-examples)
-
 ---
+layout: default
+title: mujoco-examples
+description: ROS-style robot simulations in plain Python with MuJoCo, FastAPI and OpenCV.
+image: assets/tb4_sim_poster.jpg
 
-## Demos
+# header
+authors:
+  - name: Eric Plaß
+    url: https://github.com/erelbng
+affiliations:
+  - HTWK Leipzig
+links:
+  - name: Code
+    url: https://github.com/erelbng/mujoco-examples
+    icon: github
+  - name: ROS version
+    url: https://github.com/erelbng/ros-examples
+  - name: BibTeX
+    url: "#citation"
 
-<div style="display: flex; flex-wrap: wrap; gap: 16px;">
-  <div style="flex: 1; min-width: 260px; text-align: center;">
-    <strong>TurtleBot 4: driving with <code>cmd_vel</code></strong>
-    <video src="assets/tb4_sim.mp4" poster="assets/tb4_sim_poster.jpg" width="100%" autoplay muted loop playsinline></video>
-  </div>
-  <div style="flex: 1; min-width: 260px; text-align: center;">
-    <strong>PincherX 100: pick &amp; place</strong>
-    <video src="assets/pincherx_sim.mp4" poster="assets/pincherx_sim_poster.jpg" width="100%" autoplay muted loop playsinline></video>
-  </div>
-</div>
+# teaser: videos side by side, then the one-line summary
+videos:
+  - title: TurtleBot 4
+    caption: Driving with cmd_vel, streaming odometry and camera
+    src: assets/tb4_sim.mp4
+    poster: assets/tb4_sim_poster.jpg
+  - title: PincherX 100
+    caption: Pick and place through a sequence of joint poses
+    src: assets/pincherx_sim.mp4
+    poster: assets/pincherx_sim_poster.jpg
+tldr: >-
+  Ready-to-run MuJoCo simulations of a TurtleBot 4 and a PincherX 100,
+  controlled over FastAPI WebSockets like ROS topics, without installing ROS.
 
+footer: >-
+  Built with [MuJoCo](https://mujoco.org), [FastAPI](https://fastapi.tiangolo.com) and [OpenCV](https://opencv.org).
 ---
 
 ## About
@@ -31,22 +47,21 @@ It is designed for:
 - **Data science** on odometry and joint states streamed as JSON
 - **Teleoperation** from any language that can open a WebSocket
 
----
-
-## How It Works
+## How it works
 
 Every example has the same structure. The `*_sim.py` server loads the MJCF scene, opens the MuJoCo passive viewer and serves one WebSocket endpoint at `ws://localhost:8000/ws`. On each 20 ms tick, the server reads any pending command, advances the physics, renders the robot camera and sends back a state packet. This follows the ROS publish/subscribe model, with FastAPI in place of ROS DDS.
 
 ```
- your client                    FastAPI server                 MuJoCo
- (*_client.py, any language)    (WebSocket /ws, port 8000)     (mj_step, renderer, viewer)
-
-        ---- JSON command ---->         ---- ctrl ---->
-        <--- state + JPEG -----         <--- qpos, qvel, pixels ---
-                 50 Hz
+your client      *_client.py, or any language
+   |    ^
+   |    |        down: JSON command
+   v    |        up:   state + JPEG camera frame, 50 Hz
+FastAPI server   WebSocket /ws on port 8000
+   |    ^
+   |    |        down: ctrl
+   v    |        up:   qpos, qvel, camera pixels
+MuJoCo           mj_step, offscreen renderer, passive viewer
 ```
-
----
 
 ## Robots
 
@@ -89,9 +104,7 @@ State:
 }
 ```
 
----
-
-## Quick Start
+## Quick start
 
 1. Clone the repository and install the dependencies:
    ```bash
@@ -108,8 +121,6 @@ State:
    python3 turtlebot/turtlebot_client.py   # or: python3 pincherx/pincherx_client.py
    ```
 
----
-
 ## Citation
 
 If you use **mujoco-examples** in your work, please cite it as:
@@ -123,8 +134,6 @@ If you use **mujoco-examples** in your work, please cite it as:
   url    = {https://github.com/erelbng/mujoco-examples}
 }
 ```
-
----
 
 ## Contact
 

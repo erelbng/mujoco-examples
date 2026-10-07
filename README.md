@@ -6,7 +6,7 @@
 
 **[Eric Plaß](https://github.com/erelbng)**
 
-Future Robotics · HTWK Leipzig
+HTWK Leipzig
 
 <p>
     <a href="https://erelbng.github.io/mujoco-examples/" target="_blank"><img src="https://img.shields.io/badge/Project-Website-blue?style=for-the-badge&logo=google-chrome" alt="Project Website"></a>
